@@ -1,0 +1,439 @@
+diff --git a/src/server/game/Custom/DynamicResurrection/DynamicResurrection.cpp b/src/server/game/Custom/DynamicResurrection/DynamicResurrection.cpp
+new file mode 100644
+index 0000000000..3e3d57a0e9
+--- /dev/null
++++ b/src/server/game/Custom/DynamicResurrection/DynamicResurrection.cpp
+@@ -0,0 +1,112 @@
++/* Original Copyright
++Original Author : Callmephil
++Originally for Version : 3.3.5 / 4.3.4
++Redone for TC Custom Branch 3.3.5 (4.3.4 is untested)
++By Single Player Project Developer MDic
++Assistance by Project Nemesis Developer Jinnai
++Dynamic Resurrection is a simple script that add a "Resurrection Waypoint" near the latest boss killed in dungeon or raid. for faster Resurrection.
++*/
++
++#include "Config.h"
++#include "Creature.h"
++#include "DatabaseEnv.h"
++#include "DynamicResurrection.h"
++#include "Group.h"
++#include "GroupMgr.h"
++#include "Map.h"
++#include "MapManager.h"
++#include "ObjectMgr.h"
++#include "Player.h"
++#include "ScriptMgr.h"
++
++uint8 combatcount = 0;
++
++bool Dynamic_Resurrection::IsInDungeonOrRaid(Player* player)
++{
++    if (sMapStore.LookupEntry(player->GetMapId())->Instanceable())
++    {
++        return true; // boolean need to return to a value
++    }
++    else
++    {
++        return false;
++    }
++}
++
++bool Dynamic_Resurrection::CheckForSpawnPoint(Player* player)
++{
++    if (sConfigMgr->GetBoolDefault("Dynamic.Resurrections.enable", true))
++    {
++        // Find Nearest Creature And Teleport.
++        if (player->FindNearestCreature(C_Resurrection_ENTRY, C_DISTANCE_CHECK_RANGE))
++        {
++            return true;
++        }
++        return false;
++    }
++    else
++    {
++        return false;
++    }
++}
++
++void Dynamic_Resurrection::DynamicResurrection(Player* player)
++{
++    float DRD = sConfigMgr->GetFloatDefault("Dynamic.Ressurrection.Dungeon.Health", 0.7f);
++    float DRR = sConfigMgr->GetFloatDefault("Dynamic.Ressurrection.Raid.Health", 0.7f);
++
++    if (Group* group = player->GetGroup())
++        {
++            for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
++                if (Player* member = itr->GetSource())
++                    if (member->IsInCombat())
++                        combatcount++;
++        }
++
++    Map* map = player->GetMap();
++
++    if (combatcount > 0)
++    {
++        if (AreaTrigger const* exit = sObjectMgr->GetGoBackTrigger(map->GetId()))
++        {
++            player->TeleportTo(exit->target_mapId, exit->target_X, exit->target_Y, exit->target_Z, exit->target_Orientation + M_PI);
++                if (map->IsRaid())
++                    {
++                        player->ResurrectPlayer(DRR);
++                        player->SpawnCorpseBones();
++                        return;
++                    }
++                else
++                    {
++                        player->ResurrectPlayer(DRD);
++                        player->SpawnCorpseBones();
++                        return;
++                    }
++        }
++    }
++
++        if (map->IsRaid())
++    {
++        if (Creature* checkpoint = player->FindNearestCreature(C_Resurrection_ENTRY, C_DISTANCE_CHECK_RANGE))
++        {
++            player->TeleportTo(player->GetMapId(), checkpoint->GetPositionX(), checkpoint->GetPositionY(), checkpoint->GetPositionZ(), 1);
++            player->ResurrectPlayer(DRR);
++            player->SpawnCorpseBones();
++        }
++    }
++        // Find Nearest Creature And Teleport.
++    if (map->IsDungeon())
++    {
++        if (Creature* checkpoint = player->FindNearestCreature(C_Resurrection_ENTRY, C_DISTANCE_CHECK_RANGE))
++        {
++            player->TeleportTo(player->GetMapId(), checkpoint->GetPositionX(), checkpoint->GetPositionY(), checkpoint->GetPositionZ(), 1);
++            // Revive Player with 70 %
++            player->ResurrectPlayer(DRD);
++            player->SpawnCorpseBones();
++        }
++    }
++    else
++    {
++        return;
++    }
++}
+diff --git a/src/server/game/Custom/DynamicResurrection/DynamicResurrection.h b/src/server/game/Custom/DynamicResurrection/DynamicResurrection.h
+new file mode 100644
+index 0000000000..e3df3db715
+--- /dev/null
++++ b/src/server/game/Custom/DynamicResurrection/DynamicResurrection.h
+@@ -0,0 +1,39 @@
++/* Original Copyright
++Original Author : Callmephil
++Originally for Version : 3.3.5 / 4.3.4
++Redone for TC Custom Branch 3.3.5 (4.3.4 is untested)
++By Single Player Project Developer MDic
++Assistance by Project Nemesis Developer Jinnai
++Dynamic Resurrection is a simple script that add a "Resurrection Waypoint" near the latest boss killed in dungeon or raid. for faster Resurrection.
++*/
++
++#ifndef DYNAMIC_RESURRECTION
++#define DYNAMIC_RESURRECTION
++
++#include "Player.h"
++#include "DBCStores.h"
++
++class Player;
++
++enum WAYPOINT_CREATURE
++{
++    C_Resurrection_ENTRY = 1, // change this as you wishes
++    C_DISTANCE_CHECK_RANGE = 50000, // change this (in yards)
++};
++
++class TC_GAME_API Dynamic_Resurrection
++{
++public:
++    static Dynamic_Resurrection* instance()
++    {
++        static Dynamic_Resurrection instance;
++        return &instance;
++    }
++
++    bool IsInDungeonOrRaid(Player* player);
++    bool CheckForSpawnPoint(Player* player);
++    void DynamicResurrection(Player* player);
++};
++#define sDynRes Dynamic_Resurrection::instance()
++
++#endif
+diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
+index 16c3638c7b..dd218fe72d 100644
+--- a/src/server/game/Entities/Player/Player.cpp
++++ b/src/server/game/Entities/Player/Player.cpp
+@@ -15,6 +15,17 @@
+  * with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+ 
++// 1
++// 2
++// 3
++// 4
++// 5
++// 6
++// 7
++// 8
++// 9
++// 10
++
+ #include "Player.h"
+ #include "AccountMgr.h"
+ #include "AchievementMgr.h"
+@@ -37,9 +48,11 @@
+ #include "CombatPackets.h"
+ #include "Common.h"
+ #include "ConditionMgr.h"
++#include "Config.h"
+ #include "CreatureAI.h"
+ #include "DatabaseEnv.h"
+ #include "DisableMgr.h"
++#include "DynamicResurrection.h"
+ #include "Formulas.h"
+ #include "GameEventMgr.h"
+ #include "GameObjectAI.h"
+@@ -5022,7 +5035,18 @@ void Player::RepopAtGraveyard()
+     // and don't show spirit healer location
+     if (ClosestGrave)
+     {
+-        TeleportTo(ClosestGrave->Continent, ClosestGrave->Loc.X, ClosestGrave->Loc.Y, ClosestGrave->Loc.Z, GetOrientation(), shouldResurrect ? TELE_REVIVE_AT_TELEPORT : 0);
++        if (sConfigMgr->GetBoolDefault("Dynamic.Resurrections.enable", true))
++        {
++            if (sDynRes->IsInDungeonOrRaid(this) && sDynRes->CheckForSpawnPoint(this))
++            {
++                sDynRes->DynamicResurrection(this);
++            }
++        }
++        else
++        {
++            TeleportTo(ClosestGrave->Continent, ClosestGrave->Loc.X, ClosestGrave->Loc.Y, ClosestGrave->Loc.Z, GetOrientation(), shouldResurrect ? TELE_REVIVE_AT_TELEPORT : 0);
++        }
++
+         if (isDead())                                        // not send if alive, because it used in TeleportTo()
+         {
+             WorldPackets::Misc::DeathReleaseLoc packet;
+diff --git a/src/server/scripts/Custom/DynamicResurrection.cpp b/src/server/scripts/Custom/DynamicResurrection.cpp
+new file mode 100644
+index 0000000000..62e9a6eb2a
+--- /dev/null
++++ b/src/server/scripts/Custom/DynamicResurrection.cpp
+@@ -0,0 +1,64 @@
++/* Original Copyright
++Original Author : Callmephil
++Originally for Version : 3.3.5 / 4.3.4
++Redone for TC Custom Branch 3.3.5 (4.3.4 is untested)
++By Single Player Project Developer MDic
++Assistance by Project Nemesis Developer Jinnai
++Dynamic Resurrection is a simple script that add a "Resurrection Waypoint" near the latest boss killed in dungeon or raid. for faster Resurrection.
++*/
++
++#include "Chat.h"
++#include "Config.h"
++#include "Creature.h"
++#include "DynamicResurrection.h"
++#include "GameTime.h"
++#include "Map.h"
++#include "Object.h"
++#include "Player.h"
++#include "ScriptMgr.h"
++
++class Dynamic_Resurrections : public PlayerScript
++{
++
++public:
++    Dynamic_Resurrections() : PlayerScript("Dynamic_Resurrections") {}
++
++    void OnLogin(Player* Player, bool /*firstLogin*/) override
++    {
++        if (sConfigMgr->GetBoolDefault("Dynamic.Resurrections.Announce.enable", true))
++        {
++            ChatHandler(Player->GetSession()).SendSysMessage("This server is running the |cff4CFF00Trinitycore Dynamic Resurrections |rmodule.");
++        }
++
++    }
++
++    void OnCreatureKill(Player* player, Creature* boss) override
++    {
++        if (sConfigMgr->GetBoolDefault("Dynamic.Resurrections.enable", true))
++        {
++            if (sDynRes->IsInDungeonOrRaid(player) && (boss->isWorldBoss() || boss->IsDungeonBoss()))
++            {
++                player->SummonCreature(C_Resurrection_ENTRY, boss->GetPositionX(), boss->GetPositionY(), boss->GetPositionZ(), boss->GetOrientation(), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120min);
++            }
++        }
++    }
++
++    void OnPlayerEnterMap(Map* map, Player* player)
++    {
++        if (sConfigMgr->GetBoolDefault("Raid.Entrance.Resurrection", true))
++        {
++            if (map->IsRaid())
++            {
++                if (Creature* checkpoint = player->FindNearestCreature(C_Resurrection_ENTRY, C_DISTANCE_CHECK_RANGE))
++                {
++                    player->TeleportTo(player->GetMapId(), checkpoint->GetPositionX(), checkpoint->GetPositionY(), checkpoint->GetPositionZ(), 1);
++                }
++            }
++        }
++    }
++};
++
++void AddSC_Dynamic_Resurrections()
++{
++    new Dynamic_Resurrections();
++}
+diff --git a/src/server/scripts/Custom/custom_script_loader.cpp b/src/server/scripts/Custom/custom_script_loader.cpp
+index 9e5e9ba2bf..d9e956aac4 100644
+--- a/src/server/scripts/Custom/custom_script_loader.cpp
++++ b/src/server/scripts/Custom/custom_script_loader.cpp
+@@ -19,6 +19,90 @@
+ 
+ // The name of this function should match:
+ // void Add${NameOfDirectory}Scripts()
++
++// 1
++// 2
++// 3
++// 4
++// 5
++// 6
++// 7
++// 8
++// 9
++// 10
++// 11
++// 12
++// 13
++// 14
++// 15
++void AddSC_Dynamic_Resurrections();
++// 16
++// 17
++// 18
++// 19
++// 20
++// 21
++// 22
++// 23
++// 24
++// 25
++// 26
++// 27
++// 28
++// 29
++// 30
++// 31
++// 32
++// 33
++// 34
++// 35
++// 36
++// 37
++// 38
++// 39
++// 40
++
+ void AddCustomScripts()
+ {
++    // 1
++    // 2
++    // 3
++    // 4
++    // 5
++    // 6
++    // 7
++    // 8
++    // 9
++    // 10
++    // 11
++    // 12
++    // 13
++    // 14
++    // 15
++    // 16
++    // 17
++    AddSC_Dynamic_Resurrections();
++    // 18
++    // 19
++    // 20
++    // 21
++    // 22
++    // 23
++    // 24
++    // 25
++    // 26
++    // 27
++    // 28
++    // 29
++    // 30
++    // 31
++    // 32
++    // 33
++    // 34
++    // 35
++    // 36
++    // 37
++    // 38
++    // 39
++    // 40
+ }
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
+index 0a79664476..a293e66231 100644
+--- a/src/server/worldserver/worldserver.conf.dist
++++ b/src/server/worldserver/worldserver.conf.dist
+@@ -4089,3 +4089,51 @@ Metric.OverallStatusInterval = 1
+ 
+ #
+ ###################################################################################################
++
++###################################################################################################
++# Dynamic Resurrection
++#
++# Dynamic Resurrection is a simple script that add a "Resurrection Waypoint" near the latest boss
++# killed in dungeon or raid. for faster Resurrection. If 5 players or more is in a instance it will
++# be turned off to prevent abuse of instance.
++#
++#    Dynamic.Resurrection.Announce.enable
++#         Description: Announces Module when player logs in.
++#         Default:    0 - (Disabled)
++#                     1 - (Enabled)
++
++Dynamic.Resurrections.Announce.enable = 0
++
++#    Dynamic_Resurrections.enable
++#        Description: Enables Dynamic Resurrection
++#        Default:     0 - (Disabled)
++#                     1 - (Enabled)
++
++Dynamic.Resurrections.enable = 0
++
++#
++#    Raid.Entrance.Resurrection
++#        Description: When in raids, Dynamic Reussrections resurrects players at entrance of Raids.
++#                     Then will auto teleport you back to the last boss killed when re-entering the
++#                     the Raid Map.
++#                     When Disable, it will work normally like dungeons.
++#        Default:     0 - (Disabled)
++#                     1 - (Enabled)
++
++Raid.Entrance.Resurrection = 0
++
++#    Dynamic.Ressurrection.Instance Health
++#         Description: Amount of Health Player Revives in % for either Dungeon or Raid Instance.
++#         Default:    0.7 - (70%) Float Values
++#                     1.0 - (100%) Float Values
++#
++#    Dungeon Health
++
++Dynamic.Ressurrection.Dungeon.Health = 0.7
++
++#    Raid Health
++
++Dynamic.Ressurrection.Raid.Health = 0.7
++
++#
++###################################################################################################
+\ No newline at end of file

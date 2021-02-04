@@ -3,7 +3,7 @@ SPP Developer and affiliates. Public scripts.
 
 Open Source scripts for trinitycore.
 Maintainer of Select Trinitycore Custom Changes branch.
-
+https://github.com/TrinityCore/TrinityCoreCustomChanges
 
                     GNU GENERAL PUBLIC LICENSE
                        Version 2, June 1991

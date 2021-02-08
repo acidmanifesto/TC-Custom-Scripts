@@ -1,9 +1,9 @@
 diff --git a/src/server/game/Custom/DynamicResurrection/DynamicResurrection.cpp b/src/server/game/Custom/DynamicResurrection/DynamicResurrection.cpp
 new file mode 100644
-index 0000000000..3e3d57a0e9
+index 0000000000..e0d3009db5
 --- /dev/null
 +++ b/src/server/game/Custom/DynamicResurrection/DynamicResurrection.cpp
-@@ -0,0 +1,112 @@
+@@ -0,0 +1,105 @@
 +/* Original Copyright
 +Original Author : Callmephil
 +Originally for Version : 3.3.5 / 4.3.4
@@ -19,6 +19,7 @@ index 0000000000..3e3d57a0e9
 +#include "DynamicResurrection.h"
 +#include "Group.h"
 +#include "GroupMgr.h"
++#include "InstanceScript.h"
 +#include "Map.h"
 +#include "MapManager.h"
 +#include "ObjectMgr.h"
@@ -26,6 +27,7 @@ index 0000000000..3e3d57a0e9
 +#include "ScriptMgr.h"
 +
 +uint8 combatcount = 0;
++uint32 mapid;
 +
 +bool Dynamic_Resurrection::IsInDungeonOrRaid(Player* player)
 +{
@@ -62,42 +64,34 @@ index 0000000000..3e3d57a0e9
 +    float DRR = sConfigMgr->GetFloatDefault("Dynamic.Ressurrection.Raid.Health", 0.7f);
 +
 +    if (Group* group = player->GetGroup())
-+        {
-+            for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
-+                if (Player* member = itr->GetSource())
-+                    if (member->IsInCombat())
-+                        combatcount++;
-+        }
++    {
++        for (GroupReference* itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
++            if (Player* member = itr->GetSource())
++                if (member->IsInCombat())
++                    combatcount++;
++    }
 +
 +    Map* map = player->GetMap();
 +
-+    if (combatcount > 0)
++    if (map->IsRaid() && sConfigMgr->GetBoolDefault("Raid.Entrance.Resurrection", true))
 +    {
-+        if (AreaTrigger const* exit = sObjectMgr->GetGoBackTrigger(map->GetId()))
++        if (combatcount >= 1)
 +        {
-+            player->TeleportTo(exit->target_mapId, exit->target_X, exit->target_Y, exit->target_Z, exit->target_Orientation + M_PI);
-+                if (map->IsRaid())
-+                    {
-+                        player->ResurrectPlayer(DRR);
-+                        player->SpawnCorpseBones();
-+                        return;
-+                    }
-+                else
-+                    {
-+                        player->ResurrectPlayer(DRD);
-+                        player->SpawnCorpseBones();
-+                        return;
-+                    }
++            if (AreaTrigger const* exit = sObjectMgr->GetGoBackTrigger(map->GetId()))
++            {
++                player->TeleportTo(exit->target_mapId, exit->target_X, exit->target_Y, exit->target_Z, exit->target_Orientation + M_PI);
++                player->ResurrectPlayer(DRR);
++            }
 +        }
-+    }
 +
-+        if (map->IsRaid())
-+    {
-+        if (Creature* checkpoint = player->FindNearestCreature(C_Resurrection_ENTRY, C_DISTANCE_CHECK_RANGE))
++        if(combatcount == 0)
 +        {
-+            player->TeleportTo(player->GetMapId(), checkpoint->GetPositionX(), checkpoint->GetPositionY(), checkpoint->GetPositionZ(), 1);
-+            player->ResurrectPlayer(DRR);
-+            player->SpawnCorpseBones();
++            if (Creature* checkpoint = player->FindNearestCreature(C_Resurrection_ENTRY, C_DISTANCE_CHECK_RANGE))
++            {
++                player->TeleportTo(player->GetMapId(), checkpoint->GetPositionX(), checkpoint->GetPositionY(), checkpoint->GetPositionZ(), 1);
++                player->ResurrectPlayer(DRR);
++                player->SpawnCorpseBones();
++            }
 +        }
 +    }
 +        // Find Nearest Creature And Teleport.
@@ -106,7 +100,6 @@ index 0000000000..3e3d57a0e9
 +        if (Creature* checkpoint = player->FindNearestCreature(C_Resurrection_ENTRY, C_DISTANCE_CHECK_RANGE))
 +        {
 +            player->TeleportTo(player->GetMapId(), checkpoint->GetPositionX(), checkpoint->GetPositionY(), checkpoint->GetPositionZ(), 1);
-+            // Revive Player with 70 %
 +            player->ResurrectPlayer(DRD);
 +            player->SpawnCorpseBones();
 +        }
@@ -118,10 +111,10 @@ index 0000000000..3e3d57a0e9
 +}
 diff --git a/src/server/game/Custom/DynamicResurrection/DynamicResurrection.h b/src/server/game/Custom/DynamicResurrection/DynamicResurrection.h
 new file mode 100644
-index 0000000000..e3df3db715
+index 0000000000..1485364531
 --- /dev/null
 +++ b/src/server/game/Custom/DynamicResurrection/DynamicResurrection.h
-@@ -0,0 +1,39 @@
+@@ -0,0 +1,40 @@
 +/* Original Copyright
 +Original Author : Callmephil
 +Originally for Version : 3.3.5 / 4.3.4
@@ -154,6 +147,7 @@ index 0000000000..e3df3db715
 +        return &instance;
 +    }
 +
++    void OnMapChanged(Player* player);
 +    bool IsInDungeonOrRaid(Player* player);
 +    bool CheckForSpawnPoint(Player* player);
 +    void DynamicResurrection(Player* player);
@@ -162,7 +156,7 @@ index 0000000000..e3df3db715
 +
 +#endif
 diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
-index 16c3638c7b..dd218fe72d 100644
+index 16c3638c7b..df4098e533 100644
 --- a/src/server/game/Entities/Player/Player.cpp
 +++ b/src/server/game/Entities/Player/Player.cpp
 @@ -15,6 +15,17 @@
@@ -195,7 +189,7 @@ index 16c3638c7b..dd218fe72d 100644
  #include "Formulas.h"
  #include "GameEventMgr.h"
  #include "GameObjectAI.h"
-@@ -5022,7 +5035,18 @@ void Player::RepopAtGraveyard()
+@@ -5022,7 +5035,22 @@ void Player::RepopAtGraveyard()
      // and don't show spirit healer location
      if (ClosestGrave)
      {
@@ -205,6 +199,10 @@ index 16c3638c7b..dd218fe72d 100644
 +            if (sDynRes->IsInDungeonOrRaid(this) && sDynRes->CheckForSpawnPoint(this))
 +            {
 +                sDynRes->DynamicResurrection(this);
++            }
++            else
++            {
++                TeleportTo(ClosestGrave->Continent, ClosestGrave->Loc.X, ClosestGrave->Loc.Y, ClosestGrave->Loc.Z, GetOrientation(), shouldResurrect ? TELE_REVIVE_AT_TELEPORT : 0);
 +            }
 +        }
 +        else
@@ -217,10 +215,10 @@ index 16c3638c7b..dd218fe72d 100644
              WorldPackets::Misc::DeathReleaseLoc packet;
 diff --git a/src/server/scripts/Custom/DynamicResurrection.cpp b/src/server/scripts/Custom/DynamicResurrection.cpp
 new file mode 100644
-index 0000000000..62e9a6eb2a
+index 0000000000..478967b914
 --- /dev/null
 +++ b/src/server/scripts/Custom/DynamicResurrection.cpp
-@@ -0,0 +1,64 @@
+@@ -0,0 +1,67 @@
 +/* Original Copyright
 +Original Author : Callmephil
 +Originally for Version : 3.3.5 / 4.3.4
@@ -235,8 +233,12 @@ index 0000000000..62e9a6eb2a
 +#include "Creature.h"
 +#include "DynamicResurrection.h"
 +#include "GameTime.h"
++#include "Group.h"
++#include "GroupMgr.h"
++#include "InstanceScript.h"
 +#include "Map.h"
 +#include "Object.h"
++#include "ObjectMgr.h"
 +#include "Player.h"
 +#include "ScriptMgr.h"
 +
@@ -265,17 +267,16 @@ index 0000000000..62e9a6eb2a
 +            }
 +        }
 +    }
-+
-+    void OnPlayerEnterMap(Map* map, Player* player)
++    void OnMapChanged(Player* player) override
 +    {
-+        if (sConfigMgr->GetBoolDefault("Raid.Entrance.Resurrection", true))
++        Map* map = player->GetMap();
++
++        if (map->IsRaid() && sConfigMgr->GetBoolDefault("Raid.Entrance.Resurrection", true))
 +        {
-+            if (map->IsRaid())
++            if (Creature* checkpoint = player->FindNearestCreature(C_Resurrection_ENTRY, C_DISTANCE_CHECK_RANGE))
 +            {
-+                if (Creature* checkpoint = player->FindNearestCreature(C_Resurrection_ENTRY, C_DISTANCE_CHECK_RANGE))
-+                {
-+                    player->TeleportTo(player->GetMapId(), checkpoint->GetPositionX(), checkpoint->GetPositionY(), checkpoint->GetPositionZ(), 1);
-+                }
++                player->TeleportTo(player->GetMapId(), checkpoint->GetPositionX(), checkpoint->GetPositionY(), checkpoint->GetPositionZ(), 1);
++                player->SpawnCorpseBones();
 +            }
 +        }
 +    }

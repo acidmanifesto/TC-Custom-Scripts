@@ -156,28 +156,10 @@ index 0000000000..1485364531
 +
 +#endif
 diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
-index 16c3638c7b..df4098e533 100644
+index 994bf2aa65..df4098e533 100644
 --- a/src/server/game/Entities/Player/Player.cpp
 +++ b/src/server/game/Entities/Player/Player.cpp
-@@ -15,6 +15,17 @@
-  * with this program. If not, see <http://www.gnu.org/licenses/>.
-  */
- 
-+// 1
-+// 2
-+// 3
-+// 4
-+// 5
-+// 6
-+// 7
-+// 8
-+// 9
-+// 10
-+
- #include "Player.h"
- #include "AccountMgr.h"
- #include "AchievementMgr.h"
-@@ -37,9 +48,11 @@
+@@ -48,9 +48,11 @@
  #include "CombatPackets.h"
  #include "Common.h"
  #include "ConditionMgr.h"
@@ -189,7 +171,7 @@ index 16c3638c7b..df4098e533 100644
  #include "Formulas.h"
  #include "GameEventMgr.h"
  #include "GameObjectAI.h"
-@@ -5022,7 +5035,22 @@ void Player::RepopAtGraveyard()
+@@ -5033,7 +5035,22 @@ void Player::RepopAtGraveyard()
      // and don't show spirit healer location
      if (ClosestGrave)
      {
@@ -215,10 +197,10 @@ index 16c3638c7b..df4098e533 100644
              WorldPackets::Misc::DeathReleaseLoc packet;
 diff --git a/src/server/scripts/Custom/DynamicResurrection.cpp b/src/server/scripts/Custom/DynamicResurrection.cpp
 new file mode 100644
-index 0000000000..478967b914
+index 0000000000..3f07862eb9
 --- /dev/null
 +++ b/src/server/scripts/Custom/DynamicResurrection.cpp
-@@ -0,0 +1,67 @@
+@@ -0,0 +1,77 @@
 +/* Original Copyright
 +Original Author : Callmephil
 +Originally for Version : 3.3.5 / 4.3.4
@@ -240,6 +222,7 @@ index 0000000000..478967b914
 +#include "Object.h"
 +#include "ObjectMgr.h"
 +#include "Player.h"
++#include "ScriptedCreature.h"
 +#include "ScriptMgr.h"
 +
 +class Dynamic_Resurrections : public PlayerScript
@@ -263,6 +246,15 @@ index 0000000000..478967b914
 +        {
 +            if (sDynRes->IsInDungeonOrRaid(player) && (boss->isWorldBoss() || boss->IsDungeonBoss()))
 +            {
++                std::list<Creature*> REZlist;
++                GetCreatureListWithEntryInGrid(REZlist, player, C_Resurrection_ENTRY, 50000.00f);
++                for (std::list<Creature*>::iterator itr = REZlist.begin(); itr != REZlist.end(); ++itr)
++                {
++                    if(Creature * creature = *itr)
++                    {
++                        creature->DespawnOrUnsummon();
++                    }
++                }
 +                player->SummonCreature(C_Resurrection_ENTRY, boss->GetPositionX(), boss->GetPositionY(), boss->GetPositionZ(), boss->GetOrientation(), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120min);
 +            }
 +        }
@@ -287,100 +279,25 @@ index 0000000000..478967b914
 +    new Dynamic_Resurrections();
 +}
 diff --git a/src/server/scripts/Custom/custom_script_loader.cpp b/src/server/scripts/Custom/custom_script_loader.cpp
-index 9e5e9ba2bf..d9e956aac4 100644
+index cb7667acfe..d9e956aac4 100644
 --- a/src/server/scripts/Custom/custom_script_loader.cpp
 +++ b/src/server/scripts/Custom/custom_script_loader.cpp
-@@ -19,6 +19,90 @@
- 
- // The name of this function should match:
- // void Add${NameOfDirectory}Scripts()
-+
-+// 1
-+// 2
-+// 3
-+// 4
-+// 5
-+// 6
-+// 7
-+// 8
-+// 9
-+// 10
-+// 11
-+// 12
-+// 13
-+// 14
-+// 15
+@@ -35,6 +35,7 @@
+ // 13
+ // 14
+ // 15
 +void AddSC_Dynamic_Resurrections();
-+// 16
-+// 17
-+// 18
-+// 19
-+// 20
-+// 21
-+// 22
-+// 23
-+// 24
-+// 25
-+// 26
-+// 27
-+// 28
-+// 29
-+// 30
-+// 31
-+// 32
-+// 33
-+// 34
-+// 35
-+// 36
-+// 37
-+// 38
-+// 39
-+// 40
-+
- void AddCustomScripts()
- {
-+    // 1
-+    // 2
-+    // 3
-+    // 4
-+    // 5
-+    // 6
-+    // 7
-+    // 8
-+    // 9
-+    // 10
-+    // 11
-+    // 12
-+    // 13
-+    // 14
-+    // 15
-+    // 16
-+    // 17
+ // 16
+ // 17
+ // 18
+@@ -80,6 +81,7 @@ void AddCustomScripts()
+     // 15
+     // 16
+     // 17
 +    AddSC_Dynamic_Resurrections();
-+    // 18
-+    // 19
-+    // 20
-+    // 21
-+    // 22
-+    // 23
-+    // 24
-+    // 25
-+    // 26
-+    // 27
-+    // 28
-+    // 29
-+    // 30
-+    // 31
-+    // 32
-+    // 33
-+    // 34
-+    // 35
-+    // 36
-+    // 37
-+    // 38
-+    // 39
-+    // 40
- }
+     // 18
+     // 19
+     // 20
 diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
 index 0a79664476..a293e66231 100644
 --- a/src/server/worldserver/worldserver.conf.dist

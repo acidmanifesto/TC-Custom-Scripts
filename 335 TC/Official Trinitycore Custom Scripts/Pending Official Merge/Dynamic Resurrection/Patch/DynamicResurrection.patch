@@ -1,134 +1,7 @@
-From d7ce58b0d86cd5720edc7d638509aab5540ce474 Mon Sep 17 00:00:00 2001
-From: Giacomo Pozzoni <giacomopoz@gmail.com>
-Date: Mon, 18 Feb 2019 13:52:44 +0100
-Subject: [PATCH 01/38] Add base patch changes for passive anticheat, pvpranks,
- tele npc
-
----
- src/server/game/Entities/Player/Player.cpp    | 11 +++
- .../scripts/Custom/custom_script_loader.cpp   | 82 +++++++++++++++++++
- 2 files changed, 93 insertions(+)
-
-diff --git a/src/server/game/Entities/Player/Player.cpp b/src/server/game/Entities/Player/Player.cpp
-index 21d9b0d562..67a06a30fc 100644
---- a/src/server/game/Entities/Player/Player.cpp
-+++ b/src/server/game/Entities/Player/Player.cpp
-@@ -16,6 +16,17 @@
-  * with this program. If not, see <http://www.gnu.org/licenses/>.
-  */
- 
-+// 1
-+// 2
-+// 3
-+// 4
-+// 5
-+// 6
-+// 7
-+// 8
-+// 9
-+// 10
-+
- #include "Player.h"
- #include "AccountMgr.h"
- #include "AchievementMgr.h"
-diff --git a/src/server/scripts/Custom/custom_script_loader.cpp b/src/server/scripts/Custom/custom_script_loader.cpp
-index 17b8844148..7ef42baf6a 100644
---- a/src/server/scripts/Custom/custom_script_loader.cpp
-+++ b/src/server/scripts/Custom/custom_script_loader.cpp
-@@ -20,6 +20,88 @@
- 
- // The name of this function should match:
- // void Add${NameOfDirectory}Scripts()
-+
-+// 1
-+// 2
-+// 3
-+// 4
-+// 5
-+// 6
-+// 7
-+// 8
-+// 9
-+// 10
-+// 11
-+// 12
-+// 13
-+// 14
-+// 15
-+// 16
-+// 17
-+// 18
-+// 19
-+// 20
-+// 21
-+// 22
-+// 23
-+// 24
-+// 25
-+// 26
-+// 27
-+// 28
-+// 29
-+// 30
-+// 31
-+// 32
-+// 33
-+// 34
-+// 35
-+// 36
-+// 37
-+// 38
-+// 39
-+// 40
-+
- void AddCustomScripts()
- {
-+    // 1
-+    // 2
-+    // 3
-+    // 4
-+    // 5
-+    // 6
-+    // 7
-+    // 8
-+    // 9
-+    // 10
-+    // 11
-+    // 12
-+    // 13
-+    // 14
-+    // 15
-+    // 16
-+    // 17
-+    // 18
-+    // 19
-+    // 20
-+    // 21
-+    // 22
-+    // 23
-+    // 24
-+    // 25
-+    // 26
-+    // 27
-+    // 28
-+    // 29
-+    // 30
-+    // 31
-+    // 32
-+    // 33
-+    // 34
-+    // 35
-+    // 36
-+    // 37
-+    // 38
-+    // 39
-+    // 40
- }
-
 From 3536a983fc6f6cc967f56d7f6b07ce8e46fa4015 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 31 Jan 2021 17:27:27 -0500
-Subject: [PATCH 02/38] Dynamic Resurrection
+Subject: [PATCH 01/39] Dynamic Resurrection
 
 Custom On\Off Conf
 Announcement Conf
@@ -372,7 +245,7 @@ index 0a79664476..f5d49b733c 100644
 From c7050a3784d1544822c13740ee081b5eb55c8266 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 31 Jan 2021 17:31:32 -0500
-Subject: [PATCH 03/38] white space removal at end of line
+Subject: [PATCH 02/39] white space removal at end of line
 
 ---
  src/server/worldserver/worldserver.conf.dist | 2 +-
@@ -395,7 +268,7 @@ index f5d49b733c..75aeb95283 100644
 From eaf708b07f77185532195281c70a0f2e6c2456c7 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 31 Jan 2021 19:38:49 -0500
-Subject: [PATCH 04/38] Code Correction Per Travis CI
+Subject: [PATCH 03/39] Code Correction Per Travis CI
 
 ---
  .../DynamicResurrection/DynamicResurrection.cpp      | 12 ++++++++----
@@ -474,7 +347,7 @@ index e4e0030642..c26a84ebed 100644
 From 0cacc2b5998b83612f716a2c5232478cf3797593 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 31 Jan 2021 19:50:24 -0500
-Subject: [PATCH 05/38] Further Travis CI Corrections
+Subject: [PATCH 04/39] Further Travis CI Corrections
 
 ---
  .../DynamicResurrection/DynamicResurrection.cpp     | 13 +++++++++++++
@@ -522,7 +395,7 @@ index 16fcdecdcf..ddd5bea7d1 100644
 From d3ab0b75499d1f3a027cd9b4712787986aef42d9 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 31 Jan 2021 19:52:20 -0500
-Subject: [PATCH 06/38] blank line removed per Travis CI
+Subject: [PATCH 05/39] blank line removed per Travis CI
 
 ---
  .../game/Custom/DynamicResurrection/DynamicResurrection.cpp      | 1 -
@@ -544,7 +417,7 @@ index ddd5bea7d1..2ac1c1e8f3 100644
 From ca11334cab64640112f744324bdbc080a872540b Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 31 Jan 2021 20:15:01 -0500
-Subject: [PATCH 07/38] More Travis CI corrections
+Subject: [PATCH 06/39] More Travis CI corrections
 
 ---
  .../game/Custom/DynamicResurrection/DynamicResurrection.cpp   | 4 ++--
@@ -569,7 +442,7 @@ index 2ac1c1e8f3..049139616e 100644
 From 6490247da17462292f562dc310908b512857f083 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 31 Jan 2021 20:54:56 -0500
-Subject: [PATCH 08/38] Added override per travis ci
+Subject: [PATCH 07/39] Added override per travis ci
 
 ---
  src/server/scripts/Custom/DynamicResurrection.cpp | 2 +-
@@ -592,7 +465,7 @@ index c26a84ebed..94a5a94c80 100644
 From 42e040d692f5410e0ebd607f56e95910b6b04c2a Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 31 Jan 2021 22:17:58 -0500
-Subject: [PATCH 09/38] Include Added in hopes of travis corrections
+Subject: [PATCH 08/39] Include Added in hopes of travis corrections
 
 ---
  src/server/scripts/Custom/DynamicResurrection.cpp | 1 +
@@ -614,7 +487,7 @@ index 94a5a94c80..cf1a64fd4a 100644
 From 9905acc225e759ee2f4f064560b5a2ff36216ddd Mon Sep 17 00:00:00 2001
 From: Jinnaix <37972361+Jinnaix@users.noreply.github.com>
 Date: Mon, 1 Feb 2021 09:19:45 +0100
-Subject: [PATCH 10/38] include correction
+Subject: [PATCH 09/39] include correction
 
 ---
  src/server/scripts/Custom/DynamicResurrection.cpp | 1 +
@@ -636,7 +509,7 @@ index cf1a64fd4a..cfdb653bc0 100644
 From a2c659e8279ae9f24cf34a57cfcf731599aa48ee Mon Sep 17 00:00:00 2001
 From: Jinnaix <37972361+Jinnaix@users.noreply.github.com>
 Date: Mon, 1 Feb 2021 09:55:32 +0100
-Subject: [PATCH 11/38] part2
+Subject: [PATCH 10/39] part2
 
 ---
  src/server/scripts/Custom/DynamicResurrection.cpp | 2 +-
@@ -659,7 +532,7 @@ index cfdb653bc0..ae91226cd6 100644
 From 91d58d2fda25aa8b63268ee085043028d648aadb Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Mon, 1 Feb 2021 14:47:36 -0500
-Subject: [PATCH 12/38] Crash Fix. Working Fix. Couple of TO-DOs
+Subject: [PATCH 11/39] Crash Fix. Working Fix. Couple of TO-DOs
 
 It does work. There is a few things that i tested that dealt with consistent results.
 Test Area is Rage Fire Chasm due to my famliarity of the dungeon as my personal test grounds in all wow revisions. And Moltencore Raid per @Jinnaix guidence
@@ -841,7 +714,7 @@ index ae91226cd6..1e08fdaed9 100644
 From 1d226946dee6e20abbf7b384fea201131fbd8599 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Mon, 1 Feb 2021 18:20:12 -0500
-Subject: [PATCH 13/38] Configure Health Conf Bool
+Subject: [PATCH 12/39] Configure Health Conf Bool
 
 This will let you change the default resurrection health for raid and dungeons from 0.7(%float) to what ever value where 1.0 is being 100% full health.
 
@@ -922,7 +795,7 @@ index 75aeb95283..3a51f9cef3 100644
 From f9a3b8d3bcb906a7b9e7ec85e1f18e44ee01fde0 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Mon, 1 Feb 2021 18:22:46 -0500
-Subject: [PATCH 14/38] tab white space removal
+Subject: [PATCH 13/39] tab white space removal
 
 ---
  src/server/worldserver/worldserver.conf.dist | 2 +-
@@ -945,7 +818,7 @@ index 3a51f9cef3..6db6546c7a 100644
 From 1faf322974446f7fb4ae45169dc35a10f6815c2f Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Mon, 1 Feb 2021 19:04:53 -0500
-Subject: [PATCH 15/38] Had Dungeon and Raid Swapped around
+Subject: [PATCH 14/39] Had Dungeon and Raid Swapped around
 
 ---
  .../game/Custom/DynamicResurrection/DynamicResurrection.cpp   | 4 ++--
@@ -977,7 +850,7 @@ index 131ee71efa..436679a9d2 100644
 From b301af78090dacd6381ec69a6ae8f5abb04a3941 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Tue, 2 Feb 2021 11:03:10 -0500
-Subject: [PATCH 16/38] Current Push for team review
+Subject: [PATCH 15/39] Current Push for team review
 
 ---
  .../DynamicResurrection.cpp                   | 55 ++++++++++++-------
@@ -1147,7 +1020,7 @@ index 6db6546c7a..a293e66231 100644
 From 77434e8a2a74c89dfad6dfeb4bdb1d1dfa6f00b4 Mon Sep 17 00:00:00 2001
 From: Jinnaix <37972361+Jinnaix@users.noreply.github.com>
 Date: Tue, 2 Feb 2021 17:10:28 +0100
-Subject: [PATCH 17/38] Seperate combatstate check and health values
+Subject: [PATCH 16/39] Seperate combatstate check and health values
 
 ---
  .../DynamicResurrection/DynamicResurrection.cpp      | 12 ++++++++++--
@@ -1191,7 +1064,7 @@ index b505d0679f..91b7f18d01 100644
 From 80db2a9e7f04e60b2b170129e063d4cf7657357c Mon Sep 17 00:00:00 2001
 From: Jinnaix <37972361+Jinnaix@users.noreply.github.com>
 Date: Tue, 2 Feb 2021 17:23:37 +0100
-Subject: [PATCH 18/38] cleanup
+Subject: [PATCH 17/39] cleanup
 
 ---
  .../DynamicResurrection.cpp                   | 34 +++++++++----------
@@ -1258,7 +1131,7 @@ index 91b7f18d01..8707bbbde4 100644
 From e99f59dc8338631c552638bb69d0645282714ce4 Mon Sep 17 00:00:00 2001
 From: Jinnaix <37972361+Jinnaix@users.noreply.github.com>
 Date: Tue, 2 Feb 2021 17:27:10 +0100
-Subject: [PATCH 19/38] missing include
+Subject: [PATCH 18/39] missing include
 
 ---
  src/server/scripts/Custom/DynamicResurrection.cpp | 1 +
@@ -1280,7 +1153,7 @@ index 4d1b059b88..07b919c075 100644
 From 5c95cd5a98822155b62fdfe4c6f6de77de137918 Mon Sep 17 00:00:00 2001
 From: Jinnaix <37972361+Jinnaix@users.noreply.github.com>
 Date: Tue, 2 Feb 2021 18:11:13 +0100
-Subject: [PATCH 20/38] correct basic functionality
+Subject: [PATCH 19/39] correct basic functionality
 
 ---
  .../Custom/DynamicResurrection/DynamicResurrection.cpp    | 8 ++++----
@@ -1335,7 +1208,7 @@ index 07b919c075..62e9a6eb2a 100644
 From e90248010613bd9bda492ac26439b07fe73ab20b Mon Sep 17 00:00:00 2001
 From: Jinnaix <37972361+Jinnaix@users.noreply.github.com>
 Date: Tue, 2 Feb 2021 18:23:57 +0100
-Subject: [PATCH 21/38] blubb
+Subject: [PATCH 20/39] blubb
 
 ---
  .../game/Custom/DynamicResurrection/DynamicResurrection.cpp    | 3 +--
@@ -1366,7 +1239,7 @@ index 541361c77c..703cc92454 100644
 From 669289db513cacc2aba3ef77252e9f584bab3c7c Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Tue, 2 Feb 2021 13:57:12 -0500
-Subject: [PATCH 22/38] Clean up, Remove Entrance Option
+Subject: [PATCH 21/39] Clean up, Remove Entrance Option
 
 Raid Entrance Option is not need and no longer requested.
 ---
@@ -1425,7 +1298,7 @@ index a293e66231..b09123318b 100644
 From 21af6e739a8d0c307ec9ad0d3ad1a1a94ba5ea95 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Tue, 2 Feb 2021 15:11:00 -0500
-Subject: [PATCH 23/38] Revert "Clean up, Remove Entrance Option"
+Subject: [PATCH 22/39] Revert "Clean up, Remove Entrance Option"
 
 This reverts commit 669289db513cacc2aba3ef77252e9f584bab3c7c.
 ---
@@ -1484,7 +1357,7 @@ index b09123318b..a293e66231 100644
 From 7e5d3541cb9db37e5a433cfbec9b1999b1142ae8 Mon Sep 17 00:00:00 2001
 From: Aokromes <Aokromes@users.noreply.github.com>
 Date: Wed, 3 Feb 2021 14:02:03 +0100
-Subject: [PATCH 24/38] Update custom_script_loader.cpp
+Subject: [PATCH 23/39] Update custom_script_loader.cpp
 
 ---
  src/server/scripts/Custom/custom_script_loader.cpp | 2 --
@@ -1507,7 +1380,7 @@ index e8b23dfd2c..dd094241f1 100644
 From 990cb8bbb1b2955c7f2ece67dd2916977716d94a Mon Sep 17 00:00:00 2001
 From: Aokromes <Aokromes@users.noreply.github.com>
 Date: Wed, 3 Feb 2021 14:09:08 +0100
-Subject: [PATCH 25/38] Update custom_script_loader.cpp
+Subject: [PATCH 24/39] Update custom_script_loader.cpp
 
 ---
  src/server/scripts/Custom/custom_script_loader.cpp | 1 +
@@ -1529,7 +1402,7 @@ index dd094241f1..d9e956aac4 100644
 From 71614f559abb34728953e97c64eb153f711742f0 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Wed, 3 Feb 2021 19:11:46 -0500
-Subject: [PATCH 26/38] Extend Range check to 50k to cover Raids
+Subject: [PATCH 25/39] Extend Range check to 50k to cover Raids
 
 ---
  .../game/Custom/DynamicResurrection/DynamicResurrection.h       | 2 +-
@@ -1552,7 +1425,7 @@ index 04fe72aeb8..e3df3db715 100644
 From 5e1b5803552af14a93715166ce6d797924d79ad5 Mon Sep 17 00:00:00 2001
 From: Jinnaix <37972361+Jinnaix@users.noreply.github.com>
 Date: Thu, 4 Feb 2021 13:25:14 +0100
-Subject: [PATCH 27/38] Fix no teleport to graveyard if script disabled cleanup
+Subject: [PATCH 26/39] Fix no teleport to graveyard if script disabled cleanup
 
 ---
  .../DynamicResurrection.cpp                   | 56 ++++++++-----------
@@ -1687,7 +1560,7 @@ index 03fe5766bd..dd218fe72d 100644
 From ca373c57b5f145f4b426197f2963f8f10159aa6c Mon Sep 17 00:00:00 2001
 From: Jinnaix <37972361+Jinnaix@users.noreply.github.com>
 Date: Thu, 4 Feb 2021 13:28:38 +0100
-Subject: [PATCH 28/38] whitespace
+Subject: [PATCH 27/39] whitespace
 
 ---
  .../game/Custom/DynamicResurrection/DynamicResurrection.cpp     | 2 +-
@@ -1710,7 +1583,7 @@ index d03ed39d0b..3e3d57a0e9 100644
 From bae8c0172f39ba0a64277e2deff22f90a2678a44 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 7 Feb 2021 09:40:15 -0500
-Subject: [PATCH 29/38] fixed switch around.
+Subject: [PATCH 28/39] fixed switch around.
 
 If player died in combat, released on corpse if raid and if they died outside of combat they released on entrance. That was wrong. switched them around. But we need to fix the Dynamic Resurrection.cpp in the scripts\custom folder. The Void for on entrance is what is wrong now for the auto tele to the last killed boss. need to figure out how to rewrite that if raid entrance is on.
 ---
@@ -1800,7 +1673,7 @@ index 62e9a6eb2a..471cc65366 100644
 From 6a1b871ba3efc09b40bfaf5223777c16801298a2 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 7 Feb 2021 09:47:29 -0500
-Subject: [PATCH 30/38] whitespace removal
+Subject: [PATCH 29/39] whitespace removal
 
 ---
  .../game/Custom/DynamicResurrection/DynamicResurrection.cpp     | 2 +-
@@ -1823,7 +1696,7 @@ index 868393979b..f4471ec1a4 100644
 From f2d7ff13f73affd347af4658d3fed7d7182cf9aa Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 7 Feb 2021 14:56:27 -0500
-Subject: [PATCH 31/38] onplayermap removed, rewrite
+Subject: [PATCH 30/39] onplayermap removed, rewrite
 
 onplayermap removed due to debugger never hitting it, rewritten as well, but teleport on reentry just isnt working with raid entrance. still draft. just saving my work for now
 ---
@@ -1962,7 +1835,7 @@ index a293e66231..ad72661981 100644
 From 715c77bc59c6acd06f89804e394c8f08c843dd28 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 7 Feb 2021 15:31:10 -0500
-Subject: [PATCH 32/38] travis ci fix and final touch up for the day
+Subject: [PATCH 31/39] travis ci fix and final touch up for the day
 
 still can not get auto teleport on re-entry to raid to work.
 ---
@@ -2019,7 +1892,7 @@ index 52add345e4..6e8efa577c 100644
 From 94a1513e71dd6abe25d147d1e21892c3d560adf0 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 7 Feb 2021 15:38:28 -0500
-Subject: [PATCH 33/38] travis ci appeasement
+Subject: [PATCH 32/39] travis ci appeasement
 
 ---
  .../game/Custom/DynamicResurrection/DynamicResurrection.cpp   | 4 ++--
@@ -2051,7 +1924,7 @@ index 6e8efa577c..3079c14c82 100644
 From f60b46b05dacc5170a2758910294a8b8fe3fd5c1 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 7 Feb 2021 15:46:25 -0500
-Subject: [PATCH 34/38] travis appeasement
+Subject: [PATCH 33/39] travis appeasement
 
 ---
  .../game/Custom/DynamicResurrection/DynamicResurrection.cpp     | 2 +-
@@ -2074,7 +1947,7 @@ index 3079c14c82..d028f39269 100644
 From e99ea07eb78194fdd26e197584de4a11ed862b43 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 7 Feb 2021 18:30:50 -0500
-Subject: [PATCH 35/38] fixed dynamic resurrection outside of dung and raid
+Subject: [PATCH 34/39] fixed dynamic resurrection outside of dung and raid
 
 ---
  src/server/game/Entities/Player/Player.cpp | 5 +++++
@@ -2100,7 +1973,7 @@ index dd218fe72d..18547f56fb 100644
 From f2b3c792a62ed23285ec6c57afd31ead1ceac049 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 7 Feb 2021 18:36:23 -0500
-Subject: [PATCH 36/38] whitespace clean up per travis ci
+Subject: [PATCH 35/39] whitespace clean up per travis ci
 
 ---
  src/server/game/Entities/Player/Player.cpp | 1 -
@@ -2122,7 +1995,7 @@ index 18547f56fb..df4098e533 100644
 From 2ea7d08272589f63b958c2fbb1c4edd9ebafb907 Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 7 Feb 2021 20:10:14 -0500
-Subject: [PATCH 37/38] Teleport to last kill boss after entrance WORKING for
+Subject: [PATCH 36/39] Teleport to last kill boss after entrance WORKING for
  raid entrance option
 
 ---
@@ -2205,7 +2078,7 @@ index ad72661981..a293e66231 100644
 From fce75aff495ce41d6e94925456c711d1893b539a Mon Sep 17 00:00:00 2001
 From: acidmanifesto <joshua.lee.betts@gmail.com>
 Date: Sun, 7 Feb 2021 20:13:14 -0500
-Subject: [PATCH 38/38] travis ci appeasement
+Subject: [PATCH 37/39] travis ci appeasement
 
 ---
  src/server/scripts/Custom/DynamicResurrection.cpp | 2 +-
@@ -2224,3 +2097,55 @@ index ebc309f910..478967b914 100644
      {
          Map* map = player->GetMap();
  
+
+From fb4e8daaf5d0f5e5bdc534b21dd01008a8c09e85 Mon Sep 17 00:00:00 2001
+From: acidmanifesto <joshua.lee.betts@gmail.com>
+Date: Wed, 10 Feb 2021 09:43:14 -0500
+Subject: [PATCH 38/39] Despawn previous waypoint before spawning new waypoint
+
+---
+ src/server/scripts/Custom/DynamicResurrection.cpp | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/server/scripts/Custom/DynamicResurrection.cpp b/src/server/scripts/Custom/DynamicResurrection.cpp
+index 478967b914..3e09142217 100644
+--- a/src/server/scripts/Custom/DynamicResurrection.cpp
++++ b/src/server/scripts/Custom/DynamicResurrection.cpp
+@@ -42,6 +42,15 @@ class Dynamic_Resurrections : public PlayerScript
+         {
+             if (sDynRes->IsInDungeonOrRaid(player) && (boss->isWorldBoss() || boss->IsDungeonBoss()))
+             {
++                std::list<Creature*> REZlist;
++                GetCreatureListWithEntryInGrid(REZlist, player, C_Resurrection_ENTRY, 50000.00f);
++                for (std::list<Creature*>::iterator itr = REZlist.begin(); itr != REZlist.end(); ++itr)
++                {
++                    if(Creature * creature = *itr)
++                    {
++                        creature->DespawnOrUnsummon();
++                    }
++                }
+                 player->SummonCreature(C_Resurrection_ENTRY, boss->GetPositionX(), boss->GetPositionY(), boss->GetPositionZ(), boss->GetOrientation(), TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120min);
+             }
+         }
+
+From d837fdd9e0f0ea9eba05ae47619c815e2790e30d Mon Sep 17 00:00:00 2001
+From: acidmanifesto <joshua.lee.betts@gmail.com>
+Date: Wed, 10 Feb 2021 09:48:19 -0500
+Subject: [PATCH 39/39] undeclared identifier travis fix
+
+---
+ src/server/scripts/Custom/DynamicResurrection.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/server/scripts/Custom/DynamicResurrection.cpp b/src/server/scripts/Custom/DynamicResurrection.cpp
+index 3e09142217..3f07862eb9 100644
+--- a/src/server/scripts/Custom/DynamicResurrection.cpp
++++ b/src/server/scripts/Custom/DynamicResurrection.cpp
+@@ -19,6 +19,7 @@ Dynamic Resurrection is a simple script that add a "Resurrection Waypoint" near
+ #include "Object.h"
+ #include "ObjectMgr.h"
+ #include "Player.h"
++#include "ScriptedCreature.h"
+ #include "ScriptMgr.h"
+ 
+ class Dynamic_Resurrections : public PlayerScript

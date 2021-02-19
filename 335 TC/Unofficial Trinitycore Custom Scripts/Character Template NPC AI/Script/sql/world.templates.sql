@@ -1,4 +1,4 @@
-Use world;
+-- Use world;
 
 Set @NpcName = "Pick a spec",
 	@NpcSubname = "Trinitycore",

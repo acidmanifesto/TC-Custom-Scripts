@@ -1,5 +1,7 @@
-Single Player Project Custom Scripts for Trinitycore Custom branch.
+Single Player Project Custom Scripts for Trinitycore Custom 335 branch.
 https://github.com/TrinityCore/TrinityCoreCustomChanges
+
+And Unofficial Scripts for 434 CPP.
 
 But me a coffee: https://www.buymeacoffee.com/MDic
 Visit my Patreon: https://www.patreon.com/MDic

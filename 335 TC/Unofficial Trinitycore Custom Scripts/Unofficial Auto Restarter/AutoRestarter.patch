@@ -1,0 +1,238 @@
+From b2936c1ff08838c0c5c41dfcae40eb047e41c4e6 Mon Sep 17 00:00:00 2001
+From: acidmanifesto <joshua.lee.betts@gmail.com>
+Date: Mon, 29 Mar 2021 22:15:40 -0400
+Subject: [PATCH 1/2] wip auto daily restart
+
+---
+ src/server/game/World/World.cpp              | 54 ++++++++++++++++++++
+ src/server/game/World/World.h                |  7 +++
+ src/server/worldserver/worldserver.conf.dist | 42 +++++++++++++++
+ 3 files changed, 103 insertions(+)
+
+diff --git a/src/server/game/World/World.cpp b/src/server/game/World/World.cpp
+index 5e07e6be03..0a38003eed 100644
+--- a/src/server/game/World/World.cpp
++++ b/src/server/game/World/World.cpp
+@@ -1492,6 +1492,14 @@ void World::LoadConfigSettings(bool reload)
+     m_int_configs[CONFIG_WINTERGRASP_NOBATTLETIME] = sConfigMgr->GetIntDefault("Wintergrasp.NoBattleTimer", 150);
+     m_int_configs[CONFIG_WINTERGRASP_RESTART_AFTER_CRASH] = sConfigMgr->GetIntDefault("Wintergrasp.CrashRestartTimer", 10);
+ 
++    //Auto restart system
++    m_int_configs[CONFIG_AUTO_SERVER_RESTART_HOUR] = sConfigMgr->GetIntDefault("Server.Auto.RestartHour", 5);
++    if (m_int_configs[CONFIG_AUTO_SERVER_RESTART_HOUR] > 23)
++    {
++        m_int_configs[CONFIG_AUTO_SERVER_RESTART_HOUR] = 5;
++    }
++    m_bool_configs[CONFIG_DISABLE_RESTART] = sConfigMgr->GetBoolDefault("DisableRestart", true);
++
+     // Stats limits
+     m_bool_configs[CONFIG_STATS_LIMITS_ENABLE] = sConfigMgr->GetBoolDefault("Stats.Limits.Enable", false);
+     m_float_configs[CONFIG_STATS_LIMITS_DODGE] = sConfigMgr->GetFloatDefault("Stats.Limits.Dodge", 95.0f);
+@@ -2219,6 +2227,9 @@ void World::SetInitialWorldSettings()
+         });
+     }
+ 
++    TC_LOG_INFO("server", "Init Auto Restart time...");
++    InitServerAutoRestartTime();
++
+     uint32 startupDuration = GetMSTimeDiffToNow(startupBegin);
+ 
+     TC_LOG_INFO("server.worldserver", "World initialized in %u minutes %u seconds", (startupDuration / 60000), ((startupDuration % 60000) / 1000));
+@@ -2368,6 +2379,9 @@ void World::Update(uint32 diff)
+         ResetGuildCap();
+     }
+ 
++    if (currentGameTime > m_NextServerRestart)
++        AutoRestartServer();
++
+     /// <ul><li> Handle auctions when the timer has passed
+     if (m_timers[WUPDATE_AUCTIONS].Passed())
+     {
+@@ -3082,6 +3096,46 @@ void World::SendServerMessage(ServerMessageType messageID, std::string stringPar
+         SendGlobalMessage(chatServerMessage.Write());
+ }
+ 
++void World::InitServerAutoRestartTime()
++{
++    time_t serverRestartTime = uint64(sWorld->getWorldState(m_Auto_Restart_Time));
++    if (!serverRestartTime)
++        m_NextServerRestart = time_t(time(NULL));         // game time not yet init
++
++    // generate time by config
++    time_t curTime = time(NULL);
++    tm localTm = *localtime(&curTime);
++    localTm.tm_hour = getIntConfig(CONFIG_AUTO_SERVER_RESTART_HOUR);
++    localTm.tm_min = 0;
++    localTm.tm_sec = 0;
++
++    // current day reset time
++    time_t nextDayRestartTime = mktime(&localTm);
++
++    // next reset time before current moment
++    if (curTime >= nextDayRestartTime)
++        nextDayRestartTime += DAY;
++
++    // normalize reset time
++    m_NextServerRestart = serverRestartTime < curTime ? nextDayRestartTime - DAY : nextDayRestartTime;
++
++    if (!serverRestartTime)
++        sWorld->setWorldState(m_Auto_Restart_Time, uint64(m_NextServerRestart));
++
++    if (m_bool_configs[CONFIG_DISABLE_RESTART])
++        m_NextServerRestart += DAY * 1;
++}
++
++void World::AutoRestartServer()
++{
++    TC_LOG_INFO("server", "Automatic Server Restart in 60s.");
++    AutoRestartMSG = sConfigMgr->GetStringDefault("Restart.AutoRestartReason", "Daily Restart Maintenance Will happen in 1 minute.");
++    ShutdownServ(60, SHUTDOWN_MASK_RESTART, RESTART_EXIT_CODE, AutoRestartMSG);
++
++    m_NextServerRestart = time_t(m_NextServerRestart + DAY * 1);
++    sWorld->setWorldState(m_Auto_Restart_Time, uint64(m_NextServerRestart));
++}
++
+ void World::UpdateSessions(uint32 diff)
+ {
+     {
+diff --git a/src/server/game/World/World.h b/src/server/game/World/World.h
+index a8c9bfba39..c784bf7d83 100644
+--- a/src/server/game/World/World.h
++++ b/src/server/game/World/World.h
+@@ -248,6 +248,7 @@ enum WorldIntConfigs
+     CONFIG_INSTANCE_UNLOAD_DELAY,
+     CONFIG_DAILY_QUEST_RESET_TIME_HOUR,
+     CONFIG_WEEKLY_QUEST_RESET_TIME_WDAY,
++    CONFIG_DISABLE_RESTART,
+     CONFIG_MAX_PRIMARY_TRADE_SKILL,
+     CONFIG_MIN_PETITION_SIGNS,
+     CONFIG_MIN_QUEST_SCALED_XP_RATIO,
+@@ -364,6 +365,7 @@ enum WorldIntConfigs
+     CONFIG_WINTERGRASP_BATTLETIME,
+     CONFIG_WINTERGRASP_NOBATTLETIME,
+     CONFIG_WINTERGRASP_RESTART_AFTER_CRASH,
++    CONFIG_AUTO_SERVER_RESTART_HOUR,
+     CONFIG_PACKET_SPOOF_POLICY,
+     CONFIG_PACKET_SPOOF_BANMODE,
+     CONFIG_PACKET_SPOOF_BANDURATION,
+@@ -786,6 +788,8 @@ class TC_GAME_API World
+         void ResetRandomBG();
+         void CalendarDeleteOldEvents();
+         void ResetGuildCap();
++        void InitServerAutoRestartTime();
++        void AutoRestartServer();
+     private:
+         World();
+         ~World();
+@@ -845,6 +849,8 @@ class TC_GAME_API World
+         time_t m_NextDailyQuestReset;
+         time_t m_NextWeeklyQuestReset;
+         time_t m_NextMonthlyQuestReset;
++        time_t m_Auto_Restart_Time;
++        time_t m_NextServerRestart;
+         time_t m_NextRandomBGReset;
+         time_t m_NextCalendarOldEventsDeletionTime;
+         time_t m_NextGuildReset;
+@@ -874,6 +880,7 @@ class TC_GAME_API World
+ 
+         std::string _guidWarningMsg;
+         std::string _alertRestartReason;
++        std::string AutoRestartMSG;
+ 
+         std::mutex _guidAlertLock;
+ 
+diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
+index 0a79664476..f31b5ce1c7 100644
+--- a/src/server/worldserver/worldserver.conf.dist
++++ b/src/server/worldserver/worldserver.conf.dist
+@@ -4089,3 +4089,45 @@ Metric.OverallStatusInterval = 1
+ 
+ #
+ ###################################################################################################
++
++###################################################################################################
++#    Auto Daily Restart       #
++###############################
++#
++#
++#     DisableRestart = 1
++#        Description: Enables or Disable Daily Restart
++#
++#
++#        Default:    0 (Do Daily Restart: Default)
++#                    1 (Do Not Do Daily Restart)
++#
++
++DisableRestart = 0
++
++#
++#
++#     Server.Auto.RestartHour
++#        Description: The hour in which to start if Daily Restart is to happen, Local Server Time.
++#                      0 (Midnight)
++#					  12 (Noon)
++#                     23 (11 PM)
++#
++#
++#        Default:    5 (5 AM \ 0500  24-hour clock)
++#
++#
++
++Server.Auto.RestartHour = 5
++
++#
++#    Restart.AutoRestartReason
++#        Description: The shutdown reason given when the Auto Restart Hour is reached. The server
++#                     will use a fixed time of 1 minute and the reason for shutdown will be this
++#                     message.
++#        Default:     "Daily Restart Maintenance Will happen in 1 minute."
++
++Restart.AutoRestartReason = "Daily Restart Maintenance Will happen in 1 minute."
++
++#
++###################################################################################################
+\ No newline at end of file
+
+From 5a9df424a1fe8254c8ed58e2c1ab79a7ce314148 Mon Sep 17 00:00:00 2001
+From: acidmanifesto <joshua.lee.betts@gmail.com>
+Date: Tue, 30 Mar 2021 08:32:27 -0400
+Subject: [PATCH 2/2] Kernal Specific Restarter Scritps added
+
+---
+ src/server/scripts/Custom/linux-restarter.sh    | 8 ++++++++
+ src/server/scripts/Custom/windows.restarter.bat | 9 +++++++++
+ 2 files changed, 17 insertions(+)
+ create mode 100644 src/server/scripts/Custom/linux-restarter.sh
+ create mode 100644 src/server/scripts/Custom/windows.restarter.bat
+
+diff --git a/src/server/scripts/Custom/linux-restarter.sh b/src/server/scripts/Custom/linux-restarter.sh
+new file mode 100644
+index 0000000000..d0a715043f
+--- /dev/null
++++ b/src/server/scripts/Custom/linux-restarter.sh
+@@ -0,0 +1,8 @@
++#!/bin/bash
++
++while :
++do
++./worldserver
++echo "`date` --  World server Restarting..." | tee -a ./logs/worldserver-restarter.log
++sleep 5
++done
+\ No newline at end of file
+diff --git a/src/server/scripts/Custom/windows.restarter.bat b/src/server/scripts/Custom/windows.restarter.bat
+new file mode 100644
+index 0000000000..d716519cd9
+--- /dev/null
++++ b/src/server/scripts/Custom/windows.restarter.bat
+@@ -0,0 +1,9 @@
++@ECHO OFF
++CLS
++ECHO Server Restart Started %time:~0,5% %date:~1%
++:SERVERLOOP
++worldserver.exe
++ECHO Server Restart %time:~0,5% %date:~1%
++ECHO.
++GOTO SERVERLOOP
++:END
+\ No newline at end of file

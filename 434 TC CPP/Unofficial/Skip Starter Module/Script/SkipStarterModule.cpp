@@ -229,11 +229,12 @@ public:
             {
                 if (!firstLogin)
                     return;
-                Player->LearnSpell(69046, false); // Pack Hobgoblin
                 Player->SetLevel(GBL);
                 Player->TeleportTo(1, 1569.59f, -4397.63f, 16.06f, 0.54f);
-                if (Player->GetTeam() == ALLIANCE && Player->GetQuestStatus(25267) == QUEST_STATUS_NONE)//Message for Saurfang
-                    Player->AddQuest(sObjectMgr->GetQuestTemplate(25267), nullptr);
+                if (Player->GetQuestStatus(25267) == QUEST_STATUS_NONE)
+                {
+                    Player->AddQuest(sObjectMgr->GetQuestTemplate(25267), NULL);//Message for Garrosh
+                }
                 ObjectAccessor::SaveAllPlayers();
             }
         }
@@ -244,11 +245,12 @@ public:
             {
                 if (!firstLogin)
                     return;
-                Player->LearnSpell(69046, false); // Pack Hobgoblin
                 Player->SetLevel(GBL);
                 Player->TeleportTo(1, 1569.59f, -4397.63f, 16.06f, 0.54f);
-                if (Player->GetTeam() == ALLIANCE && Player->GetQuestStatus(25267) == QUEST_STATUS_NONE)//Message for Saurfang
-                    Player->AddQuest(sObjectMgr->GetQuestTemplate(25267), nullptr);
+                if (Player->GetQuestStatus(25267) == QUEST_STATUS_NONE)//Message for Garrosh
+                {
+                    Player->AddQuest(sObjectMgr->GetQuestTemplate(25267), NULL);
+                }
                 ObjectAccessor::SaveAllPlayers();
             }
         }

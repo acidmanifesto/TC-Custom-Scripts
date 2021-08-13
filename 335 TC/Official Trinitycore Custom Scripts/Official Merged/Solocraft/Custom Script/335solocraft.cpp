@@ -1,9 +1,25 @@
 /*
-Orignal Azeroth Module Pulled from https://github.com/azerothcore/mod-solocraft
-Which is a fork of https://github.com/conan513/mod-solocraft
-Refactored to Trinitycore Custom 335
-and improved upon by Single Player Project Developer MDic
-*/
+ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Orignal Azeroth Module Pulled from https://github.com/azerothcore/mod-solocraft
+ * Which is a fork of https://github.com/conan513/mod-solocraft
+ * Refactored to Trinitycore Custom 335
+ * and improved upon by Single Player Project Developer MDic
+ */
+
 #include <map>
 #include "Config.h"
 #include "DatabaseEnv.h"
@@ -41,7 +57,7 @@ class SolocraftConfig : public WorldScript
 public:
     SolocraftConfig() : WorldScript("SolocraftConfig") {}
     // Load Configuration Settings
-    void SetInitialWorldSettings()
+    void OnConfigLoad(bool /*reload*/) override
     {
         SoloCraftEnable = sConfigMgr->GetBoolDefault("Solocraft.Enable", 1);
         SoloCraftAnnounceModule = sConfigMgr->GetBoolDefault("Solocraft.Announce", 1);
@@ -287,13 +303,8 @@ public:
 
     void OnLogout(Player* player) override
     {
-        //Database query to see if an entry is still there
-        QueryResult result = CharacterDatabase.PQuery("SELECT `GUID` FROM `custom_solocraft_character_stats` WHERE GUID = %u", player->GetGUID());
-        if (result)
-        {
-            //Remove database entry as the player has logged out
-            CharacterDatabase.PExecute("DELETE FROM custom_solocraft_character_stats WHERE GUID = %u", player->GetGUID());
-        }
+        //Remove database entry as the player has logged out
+        CharacterDatabase.PExecute("DELETE FROM custom_solocraft_character_stats WHERE GUID = %u", player->GetGUID());
     }
 };
 class solocraft_player_instance_handler : public PlayerScript {
@@ -429,7 +440,7 @@ private:
                     if (result)
                     {
                         // remove spellpower bonus
-                        player->ApplySpellPowerBonus((*result)[3].GetUInt32() * (*result)[4].GetFloat(),false);
+                        player->ApplySpellPowerBonus((*result)[3].GetUInt32() * (*result)[4].GetFloat(), false);
                     }
 
                     //Buff Spellpower

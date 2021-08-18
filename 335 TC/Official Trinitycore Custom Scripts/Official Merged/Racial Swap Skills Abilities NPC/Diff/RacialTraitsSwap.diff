@@ -1,13 +1,28 @@
 diff --git a/src/server/scripts/Custom/Racial_Traits_Swap_NPC.cpp b/src/server/scripts/Custom/Racial_Traits_Swap_NPC.cpp
 new file mode 100644
-index 0000000000..68ba3f4e93
+index 00000000000..266a61cc0a9
 --- /dev/null
 +++ b/src/server/scripts/Custom/Racial_Traits_Swap_NPC.cpp
-@@ -0,0 +1,1591 @@
+@@ -0,0 +1,1606 @@
 +/*
-+Racial Traits Swap NPC
-+SPP DEV MDIC
-+SQL Assistance by Nemesis Dev Jinnai
++ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
++ *
++ * This program is free software; you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License as published by the
++ * Free Software Foundation; either version 2 of the License, or (at your
++ * option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with this program. If not, see <http://www.gnu.org/licenses/>.
++ *
++ * Racial Traits Swap NPC For Trinitycore Custom Changes Branch
++ * Written by SPP DEV MDIC
++ * SQL Assistance by Nemesis Dev Jinnai
 +*/
 +
 +#include "Chat.h"
@@ -1596,7 +1611,7 @@ index 0000000000..68ba3f4e93
 +    new npc_race_trait_swap();
 +}
 diff --git a/src/server/scripts/Custom/custom_script_loader.cpp b/src/server/scripts/Custom/custom_script_loader.cpp
-index cb7667acfe..66a5f34eae 100644
+index cb7667acfef..66a5f34eae0 100644
 --- a/src/server/scripts/Custom/custom_script_loader.cpp
 +++ b/src/server/scripts/Custom/custom_script_loader.cpp
 @@ -59,7 +59,7 @@
@@ -1617,7 +1632,7 @@ index cb7667acfe..66a5f34eae 100644
  }
 diff --git a/src/server/scripts/Custom/sql/world.RacialSwapNPC.sql b/src/server/scripts/Custom/sql/world.RacialSwapNPC.sql
 new file mode 100644
-index 0000000000..fc32ce89c6
+index 00000000000..fc32ce89c6a
 --- /dev/null
 +++ b/src/server/scripts/Custom/sql/world.RacialSwapNPC.sql
 @@ -0,0 +1,156 @@
@@ -1778,10 +1793,10 @@ index 0000000000..fc32ce89c6
 +(988880, 'esMX', 'Saludos $n. \r\nPuedes intercambiar tus rasgos y habilidades raciales con los de los no muertos. Si la raza que elegiste no tiene $c, desaprenderás tus $c rasgos raciales. \r\nAprenderás Canibalizar, Resistencia a las sombras, Respiración submarina y Voluntad de los renegados. \r\n\r\n ¿Cual es tu deseo?', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 +(988880, 'ruRU', 'Привет $n. \r\nВы можете поменять свои расовые черты и способности на способности Нежити. Если выбранная вами раса не имеет $c, вы откажетесь от своих $c расовых черт. \r\nВы научитесь каннибализму, сопротивлению теням, подводному дыханию и воле отрекшихся. \r\n\r\nЧто твое желание?', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 diff --git a/src/server/worldserver/worldserver.conf.dist b/src/server/worldserver/worldserver.conf.dist
-index 0a79664476..065a86259d 100644
+index 022bca30772..e7a7c7594a5 100644
 --- a/src/server/worldserver/worldserver.conf.dist
 +++ b/src/server/worldserver/worldserver.conf.dist
-@@ -4089,3 +4089,28 @@ Metric.OverallStatusInterval = 1
+@@ -4117,3 +4117,28 @@ Metric.OverallStatusInterval = 1
  
  #
  ###################################################################################################

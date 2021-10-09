@@ -143,7 +143,7 @@ index 9c859bf98a..c910a4abfb 100644
 +            Creature* c = nullptr;
 +            std::vector<Creature*> creaturedie;
 +            player->GetDeadCreatureListInGrid(creaturedie, range);
-+            for (std::vector<Creature*>::iterator itr = creaturedie.begin(); itr != creaturedie.end(); ++itr)
++            for (std::vector<Creature*>::iterator itr = creaturedie.begin(); itr != creaturedie.end(); ++itr)if (!player->GetGroup() && creature && sConfigMgr->GetBoolDefault("AOE.LOOT.enable", true))
 +            {
 +                c = *itr;
 +                loot = &c->loot;
@@ -201,7 +201,9 @@ index 9c859bf98a..c910a4abfb 100644
          }
          else
          {
-+            if (sConfigMgr->GetBoolDefault("AOE.LOOT.enable", true))
++            ObjectGuid lguid = player->GetLootGUID();
++            Creature* creature = GetPlayer()->GetMap()->GetCreature(lguid);
++            if (creature && sConfigMgr->GetBoolDefault("AOE.LOOT.enable", true))
 +            {
 +                if (!player->GetGroup())
 +                {

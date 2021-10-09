@@ -211,7 +211,7 @@ index 9c859bf98a1..c910a4abfb7 100644
 -
 -        bool lootAllowed = creature && creature->IsAlive() == (player->GetClass() == CLASS_ROGUE && creature->loot.loot_type == LOOT_PICKPOCKETING);
 -        if (!lootAllowed || !creature->IsWithinDistInMap(_player, INTERACTION_DISTANCE))
-+        if (!player->GetGroup() && sConfigMgr->GetBoolDefault("AOE.LOOT.enable", true))
++        if (!player->GetGroup() && creature && sConfigMgr->GetBoolDefault("AOE.LOOT.enable", true))
          {
 -            player->SendLootError(lguid, lootAllowed ? LOOT_ERROR_TOO_FAR : LOOT_ERROR_DIDNT_KILL);
 -            return;
@@ -278,7 +278,9 @@ index 9c859bf98a1..c910a4abfb7 100644
          }
          else
          {
-+            if (sConfigMgr->GetBoolDefault("AOE.LOOT.enable", true))
++            ObjectGuid lguid = player->GetLootGUID();
++            Creature* creature = GetPlayer()->GetMap()->GetCreature(lguid);
++            if (creature && sConfigMgr->GetBoolDefault("AOE.LOOT.enable", true))
 +            {
 +                if (!player->GetGroup())
 +                {

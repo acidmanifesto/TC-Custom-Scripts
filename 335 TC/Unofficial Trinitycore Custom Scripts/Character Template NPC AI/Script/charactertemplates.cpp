@@ -928,8 +928,9 @@ public:
                 player->GetSession()->SendAreaTriggerMessage("Your talents have been reset.");
                 break;
 
-            /*case 32: //crashes if used more then once per a session
+            case 32: //crashes if used more then once per a session
                 CloseGossipMenuFor(player);
+                player->SaveToDB();
                 for (uint8 i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
                 {
                     if (Item* haveItemEquipped = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
@@ -951,7 +952,7 @@ public:
                             player->SaveToDB();
                         }
                     }
-                }*/
+                }
                 player->GetSession()->SendAreaTriggerMessage("Your equipped gear has been destroyed.");
                 break;
 

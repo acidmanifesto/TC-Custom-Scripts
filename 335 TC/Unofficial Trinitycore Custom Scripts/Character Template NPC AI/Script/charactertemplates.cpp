@@ -928,7 +928,7 @@ public:
                 player->GetSession()->SendAreaTriggerMessage("Your talents have been reset.");
                 break;
 
-            case 32: //crashes if used more then once per a session
+            case 32: //crashed fix by Fischer#8524
                 CloseGossipMenuFor(player);
                 player->SaveToDB();
                 for (uint8 i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)

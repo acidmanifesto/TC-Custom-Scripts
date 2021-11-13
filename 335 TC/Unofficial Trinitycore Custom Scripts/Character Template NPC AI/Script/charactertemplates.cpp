@@ -2,6 +2,7 @@
 Original Module Character Template by Mindsear
 Refactored and Adjusted for up to date compling on TC 335
 SPP DEV MDic
+Crash fix by Fischer#8524
 */
 
 #include "charactertemplates.h"
